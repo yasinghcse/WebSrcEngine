@@ -1,3 +1,4 @@
+package resources;
 
 /**
  * This class is used to store the data dictionary , search the word, get suggestion(auto completion)
