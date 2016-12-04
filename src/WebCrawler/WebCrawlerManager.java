@@ -91,12 +91,25 @@ public class WebCrawlerManager {
 		//WebCrawlerManager.saveWebCrawlerNode("-Wikipedia1000", webCrawler.getWebCrawledNodes());
 		
 		//*******************YADI***********
+//		Collection<WebCrawlerNode> test = webCrawler.getWebCrawledNodes();
+//		Iterator itr = test.iterator();
+//		while(itr.hasNext()){
+//			WebCrawlerNode inner = (WebCrawlerNode) itr.next();
+//			System.out.println("Web URL : "+ inner.getNodeBaseUrl());
+//			Collection<String> str = inner.getTextContentsTokens();
+//			Iterator itr2 = str.iterator();
+//			while (itr2.hasNext()){
+//				System.out.println(itr2.next());
+//			}
+//		}
+		
+		
 		InvertedIndex obj = new InvertedIndex();
 		obj.updatedloadData(webCrawler.getWebCrawledNodes());
 		//obj.getAllInvertedIndexList();
 		System.out.println("Top 10 links");
-		//System.out.println(obj.search("Geography"));
-		for( String s:obj.findCorrection("Geography")){
+		System.out.println(obj.search("Geography"));
+		for( String s:obj.getTopUrls("Geography")){
 			System.out.println(s);
 		}
 		//*******************YADI***********

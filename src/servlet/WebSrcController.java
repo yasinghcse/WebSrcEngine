@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class FirstEntry
  */
-@WebServlet("/FirstEntry")
+@WebServlet("/WebSrcController")
 public class WebSrcController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

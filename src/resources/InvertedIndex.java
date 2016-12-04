@@ -492,17 +492,17 @@ public class InvertedIndex implements Serializable {
 		t.loadData(e, url6);
 
 		// testing the inverted index and rankings
-		// System.out.println("Element hello doc no = " + t.search("hello10"));
+		System.out.println("Element hello doc no = " + t.search("hello10"));
 		// System.out.println(invertedIdxArray);
-		// for(String s: t.getTopUrl("hello10")){
-		// System.out.println(s);
-		// }
+		for(String s: t.getTopUrls("hello10")){
+		  System.out.println(s);
+		 }
 
 		// testing the guessing of the words
-		// t.guessWord("hello1");
+		 //t.guessWord("h");
 
 		// testing the correction of words
-		t.findCorrection("hello10");
+		//t.findCorrection("hello101");
 
 		// SerializeData obj1= new SerializeData();
 		// try {

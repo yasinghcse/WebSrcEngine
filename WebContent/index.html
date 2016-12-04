@@ -1,12 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+  <title>Web Search Engine</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link media="all" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/themes/smoothness/jquery-ui.css" rel="stylesheet"/>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>
+  <script src = "js/webSearchScript.js"></script>
+  <style>
+    #searchBar{
+      margin-left: 10px;
+      margin-right: 10px;
+      margin-top: 100px;
+      padding-top: 40px;
+      padding-bottom: 40px;
+    }
+    #solutionBar{
+    
+      margin-top: -25px;
+      padding-top: 0px;
+      margin-left: 10px;
+      margin-right: 10px;
+      padding-top: 40px;
+      padding-bottom: 40px;
+    }
+    #searchButton{
+      margin-top: 10px;
+      text-align: center;
+      margin-left: 460px;
+    }
+    #label{
+      text-align: center;
+      margin-left: 340px;
+      font-size: 30px;
+    }
+    #usr{
+      width: 800px;
+      margin-left: 100px;
+    }
+    th,td{
+      text-align: center;
+    }
+  </style>
 </head>
-
 <body>
-<h1>Hello</h1>
-<a href="/WebSrcEngine/FirstEntry">Jersey resource</a>
+  <div class="container">
+    <div class="jumbotron" id ="searchBar">
+      <div class="form-group">
+        <label id = "label" >WEB SEARCH ENGINE</label>
+        <input type="text" class="form-control" id="usr">
+        <button type="button" class="btn btn-primary" id="searchButton" >Search</button>
+      </div>
+    </div>
+    <div class="jumbotron" id ="solutionBar" >
+      <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Result Found:</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a>john@example.com</a></td>
+      </tr>
+      <tr>
+        <td><a>john1@example.com</a></td>
+      </tr>
+      <tr>
+        <td><a>john1@example.com</a></td>
+      </tr>
+    </tbody>
+  </table>
+    </div>
+  </div>
+<p>Keypresses: <span>0</span></p>
 </body>
 </html>
