@@ -21,10 +21,14 @@ package resources;
 
 import java.util.LinkedList;
 import java.util.Map;
+
+import WebCrawler.WebCrawlerNode;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -60,10 +64,13 @@ class Tries {
 
 /**
  * This class has the function to implement the inverted index using Trie and
- * perform below functions: 1. Creating Dictonary 2. Searching Dictonary 3.
- * Deletion 4. Prediction of words 5. Finding the correct word 6. Ranking of the
- * URLs
- * 
+ * perform below functions:
+ *  1. Creating Dictonary 
+ *  2. Searching Dictonary 
+ *  3. Deletion 
+ *  4. Prediction of words 
+ *  5. Finding the correct word 
+ *  6. Ranking of the URLs
  * 
  * @author yadwindersingh
  *
@@ -239,6 +246,24 @@ public class InvertedIndex implements Serializable {
 		}
 	}
 
+	// *****************************************
+	// function to be exposed to load the data
+	// *****************************************
+	public void updatedloadData(Collection<WebCrawlerNode> e) {
+
+			// process each element and pass it to the trie
+			Iterator<WebCrawlerNode> itr = e.iterator();
+			WebCrawlerNode webCrawledNodes= null;
+			while (itr.hasNext()) {
+				webCrawledNodes = itr.next();
+				Collection<String> eachWord = webCrawledNodes.getTextContentsTokens();
+				Iterator<String> itr1 = eachWord.iterator();
+				while(itr1.hasNext()){
+					insertWord(itr1.next(),webCrawledNodes.getNodeBaseUrl());
+				}
+			}
+		}
+
 	// *************************************
 	// function to return a String array of
 	// top urls for the matching word
@@ -248,7 +273,7 @@ public class InvertedIndex implements Serializable {
 		if (docNum != -1) {
 
 			// local variables
-			int topk = 2;
+			int topk = 10;
 			int i = 0;
 
 			// Get all the url for the matching word
@@ -311,7 +336,7 @@ public class InvertedIndex implements Serializable {
 			predictedWords[i] = prefix;
 		}
 
-		//Temp array list to find all childs
+		// Temp array list to find all childs
 		java.util.ArrayList<Tries> currentChildBuffer = new java.util.ArrayList<Tries>();
 		java.util.ArrayList<Tries> nextChildBuffer = new java.util.ArrayList<Tries>();
 		HashMap<Integer, String> wordCompleted = new HashMap<Integer, String>();
