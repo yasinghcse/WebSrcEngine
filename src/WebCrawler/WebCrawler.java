@@ -1,5 +1,6 @@
 package WebCrawler;
 
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
@@ -8,6 +9,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -18,6 +21,7 @@ import org.jsoup.select.Elements;
 import utilities.Util;
 
 
+
 public class WebCrawler {
 	
 	// Creates a LIST (Queue) to maintain the list of links that will have to be visited
@@ -26,18 +30,37 @@ public class WebCrawler {
 	// Creates a SET to maintain the list of links that were visited in order to guarantee no double visit
 	private HashSet<String> visitedLinks = new HashSet<String>();
 
+	// Creates a SET to maintain the list of links to be visited in order to guarantee no double visit
+	private HashSet<String>  linksToVisitCheckSet = new HashSet<String>();
+	
+	
 	// List of the Visited and Built Nodes
 	private Collection<WebCrawlerNode> webCrawledNodes = new LinkedList<WebCrawlerNode>();
 	
+	// Constants for validating the HREF URL Retrieved by the JSOUP.
+	//	A crawler may only want to seek out HTML pages and avoid all other MIME types. In order to request only HTML resources, 
+	//	a crawler may make an HTTP HEAD request to determine a Web resource's MIME type before requesting the entire resource with a GET request. 
+	//	To avoid making numerous HEAD requests, a crawler may examine the URL and only request a resource if the URL ends with certain characters 
+	//	such as .html, .htm, .asp, .aspx, .php, .jsp, .jspx or a slash. This strategy may cause numerous HTML Web resources to be unintentionally skipped.
+	//	Some crawlers may also avoid requesting any resources that have a "?" in them (are dynamically produced) in order to avoid spider traps that may 
+	//	cause the crawler to download an infinite number of URLs from a Web site. This strategy is unreliable if the site uses URL rewriting to simplify its URLs.
+	private final String STANDARD_URL_REGEX = "\\b(https?)://[-a-zA-Z0-9|.]+[-a-zA-Z0-9#/_|.:]*(asp|aspx|asx|asmx|cfm|html|htm|xhtml|jhtml|jsp|jspx|wss|do|php|php4|php3|phtml|py|shtml){1}$";
+	private final String STANDARD_URLFOLDER_REGEX = "\\b(https?)://[-a-zA-Z0-9|.]+[-a-zA-Z0-9#/_|.:]*(/){1}$";
+	private final String STANDARD_URLOTHER_REGEX = "\\b(https?)://[-a-zA-Z0-9|.]+[-a-zA-Z0-9/_:]*";
+
+	// Standard number of URL to be visited
 	private int MAX_URL_VISITS = 500;
 	
+	// Quantity of Link Queued to be visited while Crawling
 	private int QtyQueuedLinks = 0;
 	
+	
+	// To setup if debug messages should be shown
 	private boolean isPrintDebug = true;
 	
 	
 	/**
-	 * 	
+	 * 	Constructor of the WebCrawler. It will visit a Maximum of maxUrlVisits provided in the Constructor
 	 * 
 	 * @param maxURLVisits
 	 */
@@ -47,9 +70,9 @@ public class WebCrawler {
 
 	
 	/**
+	 * 	Returns a Collections of WebCrawlerNodes 
 	 * 
-	 * 
-	 * @return
+	 * @return Collections of WebCrawlerNodes
 	 */
 	public Collection<WebCrawlerNode> getWebCrawledNodes() {
 		return webCrawledNodes;
@@ -58,6 +81,7 @@ public class WebCrawler {
     
 	/**
 	 * 
+	 * 	Rhew URL to start Crawlling and add to the maintained Collection
 	 * 
 	 * @param urlToVisit
 	 */
@@ -66,6 +90,7 @@ public class WebCrawler {
     	try {
 	   		// Connects to the Provided URL to Visit
 	    	Connection connectionToURL = Jsoup.connect(url);
+
 	    	// Obtains the Document that in this case represents the HTML File
 		    Document jSoupDoc = connectionToURL.get();
 		    // Obtains all Tags of HREF type
@@ -89,9 +114,19 @@ public class WebCrawler {
 	    		Element link = hreflinks.get(i);
 	    		crawlerNode.addNodeUrlLink(link.attr("abs:href"));
 		    	if (QtyQueuedLinks <= this.MAX_URL_VISITS) {
-			    	linksToVisit.add(link.attr("abs:href"));
-			    	QtyQueuedLinks++;
-			    	Util.printDebug(isPrintDebug, "####### ADDED link to visit: " + link.attr("abs:href") + "  Link index: " + QtyQueuedLinks);
+		    		String hrefURL = link.attr("abs:href");
+		    		if (validadeURLWebCrawler(hrefURL)) {
+		    			if (!linksToVisitCheckSet.contains(hrefURL)) {
+					    	linksToVisit.add(hrefURL);
+					    	linksToVisitCheckSet.add(hrefURL);
+					    	QtyQueuedLinks++;
+					    	Util.printDebug(isPrintDebug, "####### ADDED link to visit: " + hrefURL + "  Link index: " + QtyQueuedLinks);
+		    			} else {
+		    				Util.printDebug(isPrintDebug, "####### NOT ADDED link to visit, already QUEUED: " + hrefURL);
+		    			}
+		    		} else {
+		    			Util.printDebug(isPrintDebug, "####### NOT ADDED link to visit, not valid: " + hrefURL);
+		    		}
 		    	}
 		    }
     	} catch (IOException ex) {
@@ -100,7 +135,7 @@ public class WebCrawler {
     		crawlerNode.setBadURL(true);
     	}
     	
-    	// Adding this NODE to lhe list of Crawled nodes
+    	// Adding this NODE to the list of Crawled nodes
     	webCrawledNodes.add(crawlerNode);
     	
 	    // Recursively visits the first Sub-URL that was Queued
@@ -109,7 +144,7 @@ public class WebCrawler {
 	    	do {
 	    		linkToVisit = linksToVisit.removeFirst();
 	    		if (visitedLinks.contains(linkToVisit)) {
-	    			Util.printDebug(isPrintDebug, "!!!!!!!!!###### Already visited : " + linkToVisit);
+	    			Util.printDebug(isPrintDebug, "###### Already visited : " + linkToVisit);
 	    		}
 	    	} while (!linksToVisit.isEmpty() && visitedLinks.contains(linkToVisit));
 	    	
@@ -122,7 +157,53 @@ public class WebCrawler {
 	    }
     }
     
+    /**
+     *   Uses REGEX functionalities to test the URL retrieved from the HREF in the HTML files.
+     * 
+     * 
+     * @param URLToValidate
+     * @return
+     */
+    public boolean validadeURLWebCrawler(String URLToValidate) {
+    	boolean URLMatches = false;
+    	if (URLToValidate != null) {
+    		URLMatches = URLMatches || URLToValidate.matches(STANDARD_URL_REGEX);
+    		URLMatches = URLMatches || URLToValidate.matches(STANDARD_URLFOLDER_REGEX);
+    		URLMatches = URLMatches || URLToValidate.matches(STANDARD_URLOTHER_REGEX);
+    	}
+		return URLMatches;
+    }   
+
+    /**
+     * 
+     * 
+     * @param args
+     */
+    public static void main (String[] args) {
+//		WebCrawler webCrawler = new WebCrawler(1000);
+//		System.out.println("1 - " + webCrawler.validadeURLWebCrawler("https://en.wikipedia.org/wiki/Franks"));
+//		System.out.println("2 - " + webCrawler.validadeURLWebCrawler("https://en.wikipedia.org/wiki/1872"));
+//		System.out.println("3 - " + webCrawler.validadeURLWebCrawler("https://en.wikipedia.org/wiki/2006"));
+//		System.out.println("4 - " + webCrawler.validadeURLWebCrawler("https://en.wikipedia.org/wiki/Led_Zeppelin"));
+//		System.out.println("5 - " + webCrawler.validadeURLWebCrawler("https://lists.wikimedia.org/mailman/listinfo/daily-article-l"));
+//		System.out.println("6 - " + webCrawler.validadeURLWebCrawler("https://en.wikipedia.org/w/index.php?title=Main_Page&action=purge/"));
+//		System.out.println("7 - " + webCrawler.validadeURLWebCrawler("https://en.wikipedia.org/wiki/Early_Netherlandish_painting"));
+//		System.out.println("8 - " + webCrawler.validadeURLWebCrawler("https://en.wikipedia.org/wiki/Template:POTD/2016-12-03"));
+//		System.out.println("9 - " + webCrawler.validadeURLWebCrawler("https://commons.wikimedia.org/wiki/"));
+//		System.out.println("10 - " + webCrawler.validadeURLWebCrawler("https://en.wikipedia.org/wiki/Special:Statistics"));
+//		System.out.println("11 - " + webCrawler.validadeURLWebCrawler("https://en.wikipedia.org/w/index.php"));
+//		System.out.println("12 - " + webCrawler.validadeURLWebCrawler("https://en.wikipedia.org/w/index.php3"));
+//		System.out.println("13 - " + webCrawler.validadeURLWebCrawler("https://en.wikipedia.org/w/index.asp"));
+//		System.out.println("14 - " + webCrawler.validadeURLWebCrawler("https://en.wikipedia.org/w/index.aspx"));
+//		System.out.println("15 - " + webCrawler.validadeURLWebCrawler("https://en.wikipedia.org/w/index.php?action=test"));
+//		System.out.println("16 - " + webCrawler.validadeURLWebCrawler("https://en.wikipedia.org/w/index.php3/"));
+//		System.out.println("17 - " + webCrawler.validadeURLWebCrawler("https://en.wikipedia.org/w/index.htm"));
+//		System.out.println("18 - " + webCrawler.validadeURLWebCrawler("https://en.wikipedia.org/w/index.htmlllll"));
+//		System.out.println("19 - " + webCrawler.validadeURLWebCrawler("https://en.wikipedia.org/wiki/Wikipedia#cite_note-KockJungSyn2016-14"));
+//		System.out.println("20 - " + webCrawler.validadeURLWebCrawler("https://en.wikipedia.org/wiki/File:RAAF_Boeing_C-17A_Globemaster_III_CBR_Gilbert.jpg"));
+//		System.out.println("21 - " + webCrawler.validadeURLWebCrawler("https://en.wikipedia.org/wiki/Gilbert.jpg"));
+//		System.out.println("22 - " + webCrawler.validadeURLWebCrawler("https://en.wikipedia.org/Gilbert.asx"));
+//		System.out.println("23 - " + webCrawler.validadeURLWebCrawler("https://en.wikipedia.org/test"));
+    }
+    
 }
-
-
-//A crawler may only want to seek out HTML pages and avoid all other MIME types. In order to request only HTML resources, a crawler may make an HTTP HEAD request to determine a Web resource's MIME type before requesting the entire resource with a GET request. To avoid making numerous HEAD requests, a crawler may examine the URL and only request a resource if the URL ends with certain characters such as .html, .htm, .asp, .aspx, .php, .jsp, .jspx or a slash. This strategy may cause numerous HTML Web resources to be unintentionally skipped.

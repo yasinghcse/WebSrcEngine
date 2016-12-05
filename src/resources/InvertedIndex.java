@@ -255,10 +255,13 @@ public class InvertedIndex implements Serializable {
 			Iterator<WebCrawlerNode> itr = e.iterator();
 			WebCrawlerNode webCrawledNodes= null;
 			while (itr.hasNext()) {
+				System.out.println("reading Url ");
 				webCrawledNodes = itr.next();
+				
 				Collection<String> eachWord = webCrawledNodes.getTextContentsTokens();
 				Iterator<String> itr1 = eachWord.iterator();
 				while(itr1.hasNext()){
+					System.out.println("reading Url " + webCrawledNodes.getNodeBaseUrl());
 					insertWord(itr1.next(),webCrawledNodes.getNodeBaseUrl());
 				}
 			}
