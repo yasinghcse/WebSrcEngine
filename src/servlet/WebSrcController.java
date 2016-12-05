@@ -124,8 +124,7 @@ public class WebSrcController extends HttpServlet {
 						response.getWriter().print(obj);
 					}
 				}
-			}
-			else if (request.getParameter("act").equals("getTopUrl")){
+			} else if (request.getParameter("act").equals("getTopUrl")) {
 				System.out.println("prefix = " + request.getParameter("prefix").length());
 				if (request.getParameter("prefix").length() != 0) {
 					InvertedIndex t = new InvertedIndex();
@@ -150,7 +149,7 @@ public class WebSrcController extends HttpServlet {
 					e.add("hello10");
 					e.add("hello10");
 					e.add("hello10");
-				
+
 					t.loadData(e, url1);
 					e.add("hello10");
 					e.add("hello10");
@@ -201,9 +200,94 @@ public class WebSrcController extends HttpServlet {
 					JSONArray obj = new JSONArray();
 					if (t.getTopUrls(request.getParameter("prefix")) != null) {
 						for (String s : t.getTopUrls(request.getParameter("prefix"))) {
-							obj.add(s);
+							if (s != null) {
+								obj.add(s);
+							}
 						}
-						System.out.println("Returnung " + t.guessWord(request.getParameter("prefix")));
+					}
+					response.getWriter().print(obj);
+				}
+			}
+			else if (request.getParameter("act").equals("getCorWord")) {
+				System.out.println("prefix = " + request.getParameter("prefix").length());
+				if (request.getParameter("prefix").length() != 0) {
+					InvertedIndex t = new InvertedIndex();
+
+					ArrayList<String> e = new ArrayList<String>();
+					String url1 = "www.test.com";
+					String url2 = "www.test2.com";
+					String url3 = "www.test3.com";
+					String url4 = "www.test4.com";
+					String url5 = "www.test5.com";
+					String url6 = "www.test6.com";
+					e.add("hello");
+					e.add("hello1");
+					e.add("hello2");
+					e.add("hello3");
+					e.add("hello4");
+					e.add("hello5");
+					e.add("hello6");
+					e.add("hello7");
+					e.add("hello8");
+					e.add("hello9");
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+
+					t.loadData(e, url1);
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					t.loadData(e, url2);
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					t.loadData(e, url3);
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					t.loadData(e, url4);
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello11");
+					t.loadData(e, url5);
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hello10");
+					e.add("hen");
+					e.add("hens");
+					e.add("hell");
+					t.loadData(e, url6);
+					JSONArray obj = new JSONArray();
+					if (t.findCorrection(request.getParameter("prefix")) != null) {
+						for (String s : t.findCorrection(request.getParameter("prefix"))) {
+							if (s != null) {
+								obj.add(s);
+							}
+						}
 					}
 					response.getWriter().print(obj);
 				}
