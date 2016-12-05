@@ -23,30 +23,60 @@ var prefixCollection = [
      "Scala",
      "Scheme"
    ];
-$(document).ready(function(){
-        $('#usr').autocomplete({
-            source: test()
-        });
+$(document).ready(function() {
+	$("input").keyup(function() {
+		getSuggestion();
+	});
+	
+
 });
 
-function test(){
-  getSuggestion("test");
-  return prefixCollection;
+
+
+
+function getSuggestion() {
+   var xhttp;
+   console.log("calling!!!!");
+   xhttp=new XMLHttpRequest();
+   xhttp.onreadystatechange = function() {
+     if (this.readyState == 4 && this.status == 200) {
+    	 
+    	 console.log($.parseJSON(xhttp.responseText));
+    	 prefixCollection=$.parseJSON(xhttp.responseText);
+    	 $('#usr').autocomplete({
+    			source : prefixCollection
+    		});
+     }
+   };
+   var str= $('#usr').val();
+   xhttp.open("GET", "WebSrcController?act=prefix&prefix=" +str, true);
+   xhttp.send();
 
 }
 
-function getSuggestion(prefix) {
-  // var xhttp;
-  // xhttp=new XMLHttpRequest();
-  // xhttp.onreadystatechange = function() {
-  //   if (this.readyState == 4 && this.status == 200) {
-  //     displayBotMessage(xhttp.responseText);
-  //   }
-  // };
-  // var str= "predict";
-  // xhttp.open("GET", "WebSrcController?act="+str+"&prefix=" +str, true);
-  // xhttp.send();
-  prefixCollection=[];
-  prefixCollection=["yadi", "clovis", "Acc"];
+function getTopUrls(){
+	var xhttp;
+	   console.log("Calling get top URl function!!!!");
+	   xhttp=new XMLHttpRequest();
+	   xhttp.onreadystatechange = function() {
+	     if (this.readyState == 4 && this.status == 200) {
+	    	 console.log($.parseJSON(xhttp.responseText));
+	    	 var createTable="";
+	    	 $.each( $.parseJSON(xhttp.responseText), function( index, value ) {
+	    		 createTable+= "<tr><td><a href = \"http://"+ value + "\">"+value+"</td></tr>";
+	    		 console.log(createTable);
+	    		});
+	    	 document.getElementById("solutionBar").style.display = "block";
+	    	 $("#test").replaceWith("<div id = \"test\"></div>");
+	    	 $("#test").append(
+	    	            "<table class=\"table table-striped\"><thead><tr><th>Result Found:</th></tr></thead><tbody>" +
+	    	            createTable+
+	    	            "</tbody></table>");
+	     }
+	   };
+	   var str= $('#usr').val();
+	   xhttp.open("GET", "WebSrcController?act=getTopUrl&prefix=" +str, true);
+	   xhttp.send();
 
 }
+

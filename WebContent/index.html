@@ -18,7 +18,7 @@
       padding-bottom: 40px;
     }
     #solutionBar{
-    
+      display: none;
       margin-top: -25px;
       padding-top: 0px;
       margin-left: 10px;
@@ -51,30 +51,13 @@
       <div class="form-group">
         <label id = "label" >WEB SEARCH ENGINE</label>
         <input type="text" class="form-control" id="usr">
-        <button type="button" class="btn btn-primary" id="searchButton" >Search</button>
+        <button type="button" class="btn btn-primary" id="searchButton" onclick="getTopUrls();" >Search</button>
       </div>
     </div>
     <div class="jumbotron" id ="solutionBar" >
-      <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Result Found:</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a>john@example.com</a></td>
-      </tr>
-      <tr>
-        <td><a>john1@example.com</a></td>
-      </tr>
-      <tr>
-        <td><a>john1@example.com</a></td>
-      </tr>
-    </tbody>
-  </table>
+    	<div id = "test">
+    	</div>
     </div>
   </div>
-<p>Keypresses: <span>0</span></p>
 </body>
 </html>

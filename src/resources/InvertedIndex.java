@@ -273,7 +273,7 @@ public class InvertedIndex implements Serializable {
 		if (docNum != -1) {
 
 			// local variables
-			int topk = 10;
+			int topk = 5;
 			int i = 0;
 
 			// Get all the url for the matching word
@@ -315,7 +315,7 @@ public class InvertedIndex implements Serializable {
 		Tries curr = root;
 		int wordLength = 0;
 		String predictedWords[] = null;
-
+		
 		// get the count of number of words available
 		for (int i = 0; i < prefix.length(); i++) {
 			if (curr.getChild(prefix.charAt(i)) == null) {
@@ -493,8 +493,8 @@ public class InvertedIndex implements Serializable {
 
 		// testing the inverted index and rankings
 		System.out.println("Element hello doc no = " + t.search("hello10"));
-		// System.out.println(invertedIdxArray);
-		for(String s: t.getTopUrls("hello10")){
+		 System.out.println(invertedIdxArray);
+		for(String s: t.getTopUrls("hen")){
 		  System.out.println(s);
 		 }
 
