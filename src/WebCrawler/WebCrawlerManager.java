@@ -122,18 +122,18 @@ public class WebCrawlerManager {
 ////		}
 //
 		// This saves (DUMPS) the Collections of Nodes into a Files so lated it may be directly loaded without WebCrawling again
-		System.out.println(">>>>>>>>>> Will save Nodes to file!");
-		WebCrawlerManager.saveSerializableObject("LuisRueda2000URL", webCrawler.getWebCrawledNodes());	
-		System.out.println("############## Nodes save to file! #########################");
-		
+//		System.out.println(">>>>>>>>>> Will save Nodes to file!");
+//		WebCrawlerManager.saveSerializableObject("LuisRueda2000URL", webCrawler.getWebCrawledNodes());	
+//		System.out.println("############## Nodes save to file! #########################");
+//		
 		
 		// This loads the Collections of Nodes from serialized Files directly into memory
 //		System.out.println("Now will load from file ...........");
-//		Collection<WebCrawlerNode> nodesSaved = (Collection<WebCrawlerNode>)WebCrawlerManager.loadSerializedObject("luis", "LinkedList");
-//		InvertedIndex obj = new InvertedIndex();
-//		obj.updatedloadData(nodesSaved);
-//		WebCrawlerManager.saveSerializableObject("luisDictonary", obj);		
-//		obj.guessWord("l");
+		Collection<WebCrawlerNode> nodesSaved = (Collection<WebCrawlerNode>)WebCrawlerManager.loadSerializedObject("luis", "LinkedList");
+		InvertedIndex obj = new InvertedIndex();
+		obj.updatedloadData(nodesSaved);
+		//WebCrawlerManager.saveSerializableObject("luisDictonary", obj);		
+		obj.guessWord("l");
 //		
    }
    

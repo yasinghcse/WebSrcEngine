@@ -24,6 +24,7 @@ import java.util.Map;
 
 import WebCrawler.WebCrawlerNode;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -122,7 +123,10 @@ public class InvertedIndex implements Serializable {
 
 		// if word found, update its occurrence
 		int wordNum = search(word);
+		
 		if (wordNum != -1) {
+			//System.out.println("Adding new word in Trie" + word );
+			//System.out.println("Word doc n"+ wordNum);
 			updateWordOccurrence(wordNum, url);
 			return;
 		}
@@ -144,6 +148,8 @@ public class InvertedIndex implements Serializable {
 		curr.isEnd = true;
 		curr.wordNumber = currWordNumber;
 		updateWordOccurrence(curr.wordNumber, url);
+		//System.out.println("Adding new word in Trie" + word );
+		//System.out.println("Word doc n"+ currWordNumber);
 		currWordNumber++;
 	}
 
@@ -255,14 +261,16 @@ public class InvertedIndex implements Serializable {
 			Iterator<WebCrawlerNode> itr = e.iterator();
 			WebCrawlerNode webCrawledNodes= null;
 			while (itr.hasNext()) {
-				System.out.println("reading Url ");
+				//System.out.println("reading Url ");
 				webCrawledNodes = itr.next();
 				
 				Collection<String> eachWord = webCrawledNodes.getTextContentsTokens();
 				Iterator<String> itr1 = eachWord.iterator();
 				while(itr1.hasNext()){
-					System.out.println("reading Url " + webCrawledNodes.getNodeBaseUrl());
-					insertWord(itr1.next(),webCrawledNodes.getNodeBaseUrl());
+					//System.out.println("reading Url " + webCrawledNodes.getNodeBaseUrl());
+					String input= itr1.next();
+					//System.out.println(input);
+					insertWord(input,webCrawledNodes.getNodeBaseUrl());
 				}
 			}
 		}
@@ -273,6 +281,7 @@ public class InvertedIndex implements Serializable {
 	// *************************************
 	public String[] getTopUrls(String word) {
 		int docNum = search(word);
+		System.out.println("Word is present at " + docNum);
 		if (docNum != -1) {
 
 			// local variables
@@ -326,6 +335,8 @@ public class InvertedIndex implements Serializable {
 				return null;
 			} else if (i == (prefix.length() - 1)) {
 				curr = curr.getChild(prefix.charAt(i));
+				System.out.println("Char reading = "+ prefix.charAt(i));
+				System.out.println("Curr value =" + curr.data + "===Curr count= " + curr.count);
 				wordLength = curr.count;
 			} else {
 				curr = curr.getChild(prefix.charAt(i));
@@ -361,13 +372,15 @@ public class InvertedIndex implements Serializable {
 					counter++;
 				}
 				for (int j = 0; j < e.count; j++) {
-					// System.out.println(
-					// "e.data " + e.data + "========boolena" + e.isEnd +
-					// "=========e.counter " + e.counter);
-					if (e.isEnd && e.count == 1) {
+					 System.out.println(
+					 "e.data " + e.data + "========boolena" + e.isEnd +
+					 "=========e.counter " + e.count);
+					 
+					 //fixing to get the corrcet word
+					if (e.isEnd && j == (e.count-1)) {
 						wordCompleted.put(counter, "done");
 					}
-					// System.out.println("counter " + counter);
+					 System.out.println("counter " + counter);
 					predictedWords[counter] = predictedWords[counter] + e.data;
 					counter++;
 				}
@@ -425,7 +438,9 @@ public class InvertedIndex implements Serializable {
 	// Main function to run the implementation
 	// *****************************************
 	public static void main(String[] arr) {
-//		InvertedIndex t = new InvertedIndex();
+		InvertedIndex t = new InvertedIndex();
+//		System.out.println(t.findEditDistance("been", "bee"));
+//		
 //		ArrayList<String> e = new ArrayList<String>();
 //		String url1 = "www.test.com";
 //		String url2 = "www.test2.com";
@@ -433,8 +448,8 @@ public class InvertedIndex implements Serializable {
 //		String url4 = "www.test4.com";
 //		String url5 = "www.test5.com";
 //		String url6 = "www.test6.com";
-//		e.add("hello");
-//		e.add("hello1");
+//		e.add("been");
+//		e.add("been1");
 //		e.add("hello2");
 //		e.add("hello3");
 //		e.add("hello4");
@@ -509,17 +524,17 @@ public class InvertedIndex implements Serializable {
 
 //		HashMap<Integer,Integer> t = new HashMap<>();
 //		t.put(10,10);
-		 SerializeData obj1= new SerializeData();
-		 try {
-		 //obj1.writeData(t);
-		 obj1.readData();
-		 } catch (IOException e1) {
-		 // TODO Auto-generated catch block
-		 e1.printStackTrace();
-		 } catch (Exception e1) {
-		 // TODO Auto-generated catch block
-		 e1.printStackTrace();
-		 }
+//		 SerializeData obj1= new SerializeData();
+//		 try {
+//		 //obj1.writeData(t);
+//		 obj1.readData();
+//		 } catch (IOException e1) {
+//		 // TODO Auto-generated catch block
+//		 e1.printStackTrace();
+//		 } catch (Exception e1) {
+//		 // TODO Auto-generated catch block
+//		 e1.printStackTrace();
+//		 }
 
 	}
 
