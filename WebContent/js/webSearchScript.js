@@ -42,7 +42,7 @@ function getTopUrls() {
 			if ($.parseJSON(xhttp.responseText).length > 0) {
 				console.log("insoder");
 				$.each($.parseJSON(xhttp.responseText), function(index, value) {
-					createTable += "<tr><td><a href = \"http://" + value
+					createTable += "<tr><td><a href = \"" + value
 							+ "\">" + value + "</td></tr>";
 					console.log(createTable);
 				});
@@ -53,7 +53,9 @@ function getTopUrls() {
 								"<table class=\"table table-striped\"><thead><tr><th>Result Found:</th></tr></thead><tbody>"
 										+ createTable + "</tbody></table>");
 			} else {
+				console.log("Returned zero, will call recomended Words!");
 				getrecommendedWord();
+				
 			}
 		}
 	};
@@ -65,13 +67,15 @@ function getTopUrls() {
 
 function getrecommendedWord() {
 	var xhttp;
-	console.log("Calling get top URl function!!!!");
+	console.log("Calling get getRecommendeWord!!!!");
 	xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			console.log($.parseJSON(xhttp.responseText));
 			var createTable = "";
 
+			console.log("Hello ready to present....");
+			console.log(xhttp.responseText);
 			if ($.parseJSON(xhttp.responseText).length > 0) {
 				console.log("insoder");
 				$.each($.parseJSON(xhttp.responseText), function(index, value) {

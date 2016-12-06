@@ -19,10 +19,10 @@
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry exported="true" kind="lib" path="/Users/yadwindersingh/Documents/apache-tomcat-8.0.37/lib/servlet-api.jar"/>
-	<classpathentry exported="true" kind="lib" path="/Users/yadwindersingh/Downloads/ACC Project/lib/jsoup-1.8.1-javadoc.jar"/>
-	<classpathentry exported="true" kind="lib" path="/Users/yadwindersingh/Downloads/ACC Project/lib/jsoup-1.8.1-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="/Users/yadwindersingh/Downloads/ACC Project/lib/jsoup-1.8.1.jar"/>
 	<classpathentry kind="lib" path="/Users/yadwindersingh/.m2/repository/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1-sources.jar"/>
 	<classpathentry kind="lib" path="/Users/yadwindersingh/.m2/repository/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/Users/yadwindersingh/Downloads/ACC Project/lib/jsoup-1.8.1-javadoc.jar"/>
+	<classpathentry kind="lib" path="/Users/yadwindersingh/Downloads/ACC Project/lib/jsoup-1.8.1-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/yadwindersingh/Downloads/ACC Project/lib/jsoup-1.8.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

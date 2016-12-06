@@ -37,8 +37,6 @@ public class WebCrawlerManager {
    /**
     * 
     * 
-    * 
-    * 
     * @param groupName
     * @return
     */
@@ -51,6 +49,7 @@ public class WebCrawlerManager {
 	   fileIn.close();    	  
        return nodes;
     }   
+   
 
    /**
     * 
@@ -61,7 +60,7 @@ public class WebCrawlerManager {
     */
 	public static boolean saveSerializableObject(String suffixName, Object objectToSave) throws IOException {
 		boolean saved = false; 
-		FileOutputStream fileOut = new FileOutputStream(objectToSave.getClass().getSimpleName() + "-" + suffixName + FILE_TYPE);
+		FileOutputStream fileOut = new FileOutputStream("D:\\" + objectToSave.getClass().getSimpleName() + "-" + suffixName + FILE_TYPE);
 		ObjectOutputStream out = new ObjectOutputStream(fileOut);
 		out.writeObject(objectToSave);
 		out.close();
@@ -81,9 +80,11 @@ public class WebCrawlerManager {
 	*/
 	public static Object loadSerializedObject (String suffixName, String className) throws IOException, ClassNotFoundException {
 		Object loadedObject = null;
+		System.out.println("Serialized Class File to open is: " + className + "-" + suffixName + FILE_TYPE);
 		FileInputStream fileIn = new FileInputStream(className + "-" + suffixName + FILE_TYPE);
 		ObjectInputStream in = new ObjectInputStream(fileIn);
 		loadedObject = in.readObject();
+		System.out.println("Object loaded !! => " + loadedObject);
 		in.close();
 		fileIn.close();    	  
 	    return loadedObject;
@@ -104,11 +105,11 @@ public class WebCrawlerManager {
 		 *  And then will QUEUE all links of this page. The limit of pages QUEUED is N
 		 *  No link is visited Twice, it is guaranteed by a HashSet of links
 		 */
-//		WebCrawler webCrawler = new WebCrawler(1000);
+		WebCrawler webCrawler = new WebCrawler(2000);
 ////		// Starts Crawling links based on a URL, in this case the W3G
-//		webCrawler.buildWebCrawl("http://luisrueda.cs.uwindsor.ca/");
+		webCrawler.buildWebCrawl("http://luisrueda.cs.uwindsor.ca/");
 //     	// Final number of nodes, that means, number of links and its text parsed into Tokens
-//		System.out.println("List size : " + webCrawler.getWebCrawledNodes().size());
+		System.out.println("List size : " + webCrawler.getWebCrawledNodes().size());
 //		Collection<WebCrawlerNode> nodesMemory = webCrawler.getWebCrawledNodes();
 //		Iterator<WebCrawlerNode> it = nodesMemory.iterator();
 ////
@@ -120,19 +121,19 @@ public class WebCrawlerManager {
 ////			System.out.println("TXT Tokens from visited NODE ===> " + node.getTextContentsTokens());
 ////		}
 //
-////		// This saves (DUMPS) the Collections of Nodes into a Files so lated it may be directly loaded without WebCrawling again
-//		System.out.println(">>>>>>>>>> Will save Nodes to file!");
-//		WebCrawlerManager.saveSerializableObject("luis", webCrawler.getWebCrawledNodes());	
-//		System.out.println("############## Nodes save to file! #########################");
+		// This saves (DUMPS) the Collections of Nodes into a Files so lated it may be directly loaded without WebCrawling again
+		System.out.println(">>>>>>>>>> Will save Nodes to file!");
+		WebCrawlerManager.saveSerializableObject("LuisRueda2000URL", webCrawler.getWebCrawledNodes());	
+		System.out.println("############## Nodes save to file! #########################");
 		
 		
 		// This loads the Collections of Nodes from serialized Files directly into memory
 //		System.out.println("Now will load from file ...........");
-		Collection<WebCrawlerNode> nodesSaved = (Collection<WebCrawlerNode>)WebCrawlerManager.loadSerializedObject("luis", "LinkedList");
-		InvertedIndex obj = new InvertedIndex();
-		obj.updatedloadData(nodesSaved);
-		WebCrawlerManager.saveSerializableObject("luisDictonary", obj);		
-		obj.guessWord("l");
+//		Collection<WebCrawlerNode> nodesSaved = (Collection<WebCrawlerNode>)WebCrawlerManager.loadSerializedObject("luis", "LinkedList");
+//		InvertedIndex obj = new InvertedIndex();
+//		obj.updatedloadData(nodesSaved);
+//		WebCrawlerManager.saveSerializableObject("luisDictonary", obj);		
+//		obj.guessWord("l");
 //		
    }
    
